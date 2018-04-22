@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="app.wllfengshu.dao.RecordingDao" >
+
+	<resultMap id="recordingList" type="app.wllfengshu.entity.Recording">
+        <id column="id" property="id" />
+        <result column="ani" property="ani" />
+        <result column="call_direction" property="call_direction" />
+        <result column="call_id" property="call_id" />
+        <result column="call_length" property="call_length" />
+        <result column="dnis" property="dnis" />
+        <result column="end_time" property="end_time" />
+        <result column="file_place" property="file_place" />
+        <result column="file_size" property="file_size" />
+        <result column="start_time" property="start_time" />
+        <result column="state" property="state" />
+        <result column="user_id" property="user_id" />
+    </resultMap>
+
+	<select id="getRecordings" parameterType="string" resultMap="recordingList" >
+		SELECT 
+			*
+		FROM 
+			t_recording r
+		WHERE 
+			r.user_id = #{user_id}
+	</select>
+
+	<select id="getRecording" parameterType="String" resultType="app.wllfengshu.entity.Recording" >
+		SELECT 
+			*
+		FROM 
+			t_recording r
+		WHERE 
+			r.id = #{id}
+	</select>
+	
+    <delete id="deleteRecording" parameterType="String">  
+        delete from
+        	t_recording
+        where 
+        	id = #{id}  
+    </delete>
+</mapper>
