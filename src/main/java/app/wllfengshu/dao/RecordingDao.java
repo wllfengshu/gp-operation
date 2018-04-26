@@ -12,7 +12,12 @@ import app.wllfengshu.entity.Recording;
  */
 @Repository
 public interface RecordingDao {
-	public List<Recording> getRecordings(@Param("user_id")String user_id);
+	public List<Recording> getRecordings(
+			@Param("tenant_id")String tenant_id, 
+			@Param("ani")String ani,
+			@Param("dnis")String dnis, 
+			@Param("pageStart")int pageStart, 
+			@Param("pageEnd")int pageEnd);
 
 	public Recording getRecording(@Param("id")String id);
 

@@ -23,7 +23,11 @@
 		FROM 
 			t_recording r
 		WHERE 
-			r.user_id = #{user_id}
+			r.tenant_id = #{tenant_id} 
+			<if test="!ani.equals('')">AND fc.ani=#{ani} </if>
+			<if test="!dnis.equals('')">AND fc.dnis=#{dnis} </if>
+			ORDER BY r.start_time , r.end_time desc 
+			LIMIT #{pageStart} ,#{pageEnd} 
 	</select>
 
 	<select id="getRecording" parameterType="String" resultType="app.wllfengshu.entity.Recording" >
