@@ -19,6 +19,11 @@ public interface RecordingDao {
 			@Param("pageStart")int pageStart, 
 			@Param("pageEnd")int pageEnd);
 
+	public int getCount(
+			@Param("tenant_id")String tenant_id, 
+			@Param("ani")String ani,
+			@Param("dnis")String dnis);
+	
 	public Recording getRecording(@Param("id")String id);
 
 	public void deleteRecording( @Param("id")String id);

@@ -24,10 +24,21 @@
 			t_recording r
 		WHERE 
 			r.tenant_id = #{tenant_id} 
-			<if test="!ani.equals('')">AND fc.ani=#{ani} </if>
-			<if test="!dnis.equals('')">AND fc.dnis=#{dnis} </if>
+			<if test="!ani.equals('')">AND r.ani=#{ani} </if>
+			<if test="!dnis.equals('')">AND r.dnis=#{dnis} </if>
 			ORDER BY r.start_time , r.end_time desc 
 			LIMIT #{pageStart} ,#{pageEnd} 
+	</select>
+
+	<select id="getCount"  resultType="int">
+		SELECT 
+			count(*)
+		FROM 
+			t_recording r
+		WHERE 
+			r.tenant_id = #{tenant_id} 
+			<if test="!ani.equals('')">AND r.ani=#{ani} </if>
+			<if test="!dnis.equals('')">AND r.dnis=#{dnis} </if>
 	</select>
 
 	<select id="getRecording" parameterType="String" resultType="app.wllfengshu.entity.Recording" >

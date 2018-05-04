@@ -14,6 +14,8 @@ import app.wllfengshu.dao.RecordingDao;
 import app.wllfengshu.entity.Recording;
 import app.wllfengshu.exception.NotAcceptableException;
 import app.wllfengshu.util.AuthUtil;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 
 @Service
 public class RecordingServiceImpl implements RecordingService {
@@ -25,7 +27,16 @@ public class RecordingServiceImpl implements RecordingService {
 	@Override
 	public String getRecordings(String sessionId,String user_id,String tenant_id,String token,String ani,String dnis,int pageNo,int pageSize) throws NotAcceptableException {
 		Map<String,Object> responseMap = new HashMap<String,Object>();
-		AuthUtil.instance.checkUserInfo(sessionId, user_id);
+		JSONObject user = AuthUtil.instance.getUser(sessionId, user_id);
+		if (null==user || user.isNullObject()) {
+			throw new NotAcceptableException("没有权限");
+		}
+		JSONArray roles = user.getJSONArray("roles");
+		JSONObject role = roles.getJSONObject(0);
+		String role_name=role.getString("role_name");
+		if (!"qc".equals(role_name)) {
+			throw new NotAcceptableException("角色异常");
+		}
 		List<Recording> recordings =null;
 		if (token.equals("crm")) {//质检员对当前租户下所有录音进行质检
 			recordings = recordingDao.getRecordings(tenant_id,ani,dnis,(pageNo-1)*pageSize,pageSize);
@@ -33,7 +44,7 @@ public class RecordingServiceImpl implements RecordingService {
 			throw new NotAcceptableException("凭证异常");
 		}
 		responseMap.put("data", recordings);
-		responseMap.put("count", recordings.size());
+		responseMap.put("count", recordingDao.getCount(tenant_id,ani,dnis));
 		responseMap.put("timestamp", String.valueOf(System.currentTimeMillis()));
 		return gson.toJson(responseMap);
 	}
